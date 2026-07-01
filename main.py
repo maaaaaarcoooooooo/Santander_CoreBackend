@@ -1,5 +1,7 @@
+import os 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from app.routes import (
     rtr_scoring, rtr_creditos, rtr_ahorros,
     rtr_dashboard, rtr_clientes, rtr_auth, rtr_homebanking, rtr_recuperaciones,
@@ -11,13 +13,24 @@ app = FastAPI(
     version="1.0.0"
 )
 
+app.mount("/public", StaticFiles(directory="public"), name="public")
+
+origins = [
+    "http://localhost:5173",
+]
+
+cors_origin = os.getenv("CORS_ORIGIN")
+if cors_origin:
+    origins.append(cors_origin)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # React Vite frontend
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 app.include_router(rtr_auth.router,      prefix="/auth",      tags=["Auth"])
 app.include_router(rtr_scoring.router,   prefix="/scoring",   tags=["Scoring"])
