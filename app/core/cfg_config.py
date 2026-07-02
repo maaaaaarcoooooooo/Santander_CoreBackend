@@ -21,7 +21,5 @@ class Settings(BaseSettings):
             return self.ALLOW_ORIGIN_REGEX.strip()
         return None
 
-    class Config:
-        env_file = ".env"
 
 settings = Settings()
