@@ -1,31 +1,27 @@
-import os 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from app.core.cfg_config import settings
 from app.routes import (
     rtr_scoring, rtr_creditos, rtr_ahorros,
     rtr_dashboard, rtr_clientes, rtr_auth, rtr_homebanking, rtr_recuperaciones,
 )
 
 app = FastAPI(
-    title="Core Financiero — Banco Andino",
+    title="Core Financiero — Banco Banbif",
     description="Motor de scoring, cartera crediticia y KPIs institucionales",
     version="1.0.0"
 )
 
 app.mount("/public", StaticFiles(directory="public"), name="public")
 
-origins = [
-    "http://localhost:5173",
-]
-
-cors_origin = os.getenv("CORS_ORIGIN")
-if cors_origin:
-    origins.append(cors_origin)
+origins = settings.cors_origins_list
+allow_origin_regex = settings.allow_origin_regex
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=allow_origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
