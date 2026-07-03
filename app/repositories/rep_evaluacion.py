@@ -298,9 +298,9 @@ def desembolsar(db: Session, sol) -> dict:
                  pkmediopago, pkcanaltransaccional, pkmoneda, pkcondicioncontable, pkproducto,
                  pkagenciaorigen, montooperacion, montopagoconcepto, codtipoegresoingreso,
                  fechahoraoperacion, periododia, codusuope, fecultactualizacion)
-            VALUES ('CR', 'ABONO-DESEMB-' || :pkcc, :pkca, :con_dep, :tipo_cre, :medio, :canal, :mon, :cond, :prod,
+            VALUES ('CR', 'ABONO-DESEMB-' || :pkcc, :pkca, :con_dcap, :tipo_cre, :medio, :canal, :mon, :cond, :prod,
                     :ag, :monto, :monto, 'I', :fh, :pd, 'CORE', NOW())
-        """), {"pkcc": pkcc, "pkca": pkca, "con_dep": cat.con_dep, "tipo_cre": cat.tipo_cre,
+        """), {"pkcc": pkcc, "pkca": pkca, "con_dcap": cat.con_dcap, "tipo_cre": cat.tipo_cre,
                "medio": cat.medio, "canal": cat.canal, "mon": cat.mon, "cond": cat.cond,
                "prod": cat.prod, "ag": cat.ag, "monto": monto, "fh": hoy, "pd": pd_val})
 
