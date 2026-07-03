@@ -167,52 +167,32 @@ def desembolsar(db: Session, sol) -> dict:
         db.execute(text("""
             INSERT INTO fagcuentacredito (
                 periodomes, pkcuentacredito, pksolicitud, pkestadocredito, nrocuotas, nrodias,
-                nrodiasgracias, diafechafija, codtipocuota, codtipoperiodo, flaglibreamortizacion,
                 montoaprobadocredito, montocapitaldesembolsado, montocapitalpagado,
                 montointeresprogramado, montointeresalafecha, montointerespagado,
                 montomoraprogramada, montomorapagada, montogastoprogramado, montogastopagado,
                 pkproducto, pkrecurso, pksubrecurso, pkmoneda, pkmodalidad,
-                codplazo, codlineacredito, nrotasacompensatoria, tasainterescompensatoria,
-                nrotasamoratoria, tasainteresmoratoria, diasatrasocredito,
-                fechaculminacioncredito, fechageneracioncredito, fechadesembolsocredito,
-                tipocambiodesembolso, pkgrupocredito, flagrefinanciado, flagreestructurado,
-                flagreprogramado, flagjudicial, flagcastigado, pkactividadeconomica,
-                montosaldonormal, montosaldovencido, flagnuevorecurrente,
-                montocostoefectivo, pktipotasacompensatoria, pktipotasamoratoria,
-                pkcliente, nrocronograma, pkcondicioncontable, flagclientenuevobancoandino,
+                pkcliente, nrocronograma, pkcondicioncontable,
                 flagclientenuevo, flagclientecartera, pkcalificacioncrediticiainterna,
-                pkcalificacioncrediticiaexterna, fechaingresojudicial, montocapitalinicio,
-                montointeresinicio, montomorainicio, montogastoinicio, nrodiasatrasoinicio,
+                pkcalificacioncrediticiaexterna,
                 montosaldocapital, montosaldointeres, montosaldomoratorio, montosaldogasto,
-                car_vig_capital, car_vig_int_compensatorio, car_vig_int_moratorio, car_vig_gastos,
-                car_ven_capital, car_ven_int_compensatorio, car_ven_int_moratorio, car_ven_gastos,
-                car_ref_capital, car_ref_int_compensatorio, car_ref_int_moratorio, car_ref_gastos,
-                car_rep_capital, car_rep_int_compensatorio, car_rep_int_moratorio, car_rep_gastos,
-                car_jud_capital, car_jud_int_compensatorio, car_jud_int_moratorio, car_jud_gastos,
-                car_cas_capital, car_cas_int_compensatorio, car_cas_int_moratorio, car_cas_gastos,
-                car_con_capital, car_con_int_compensatorio, car_con_int_moratorio, car_con_gastos,
-                saldodiferido, saldodevengado, saldoprovisiones, montosaldocliente,
-                pkagencia, pkjeferegional, pkadministrador, pkasesor, pkasesornivel, fecultactualizacion
+                montosaldonormal, montosaldovencido, montosaldocliente,
+                pkagencia, pkasesor, fecultactualizacion
             ) VALUES (
-                :periodomes, :pkcc, :pksol, :est, :plazo, :nrodias, 0,
-                15, 'FIJA', 'MEN', 'N',
-                :monto, :monto, 0, 0, 0, 0, 0, 0, 0, 0, :prod,
-                1, 1, :mon, 1,
-                'MEN', 'LIN', 0, 0, 0, 0,
-                0, (NOW() + INTERVAL '1 year')::date, NOW()::date, NOW()::date,
-                1.0, 1, 'N', 'N', 'N', 'N', 'N', :act, :monto, 0, 'N',
-                0, 1, 1, :pkcli, 1, :cond, 'N', 'N', 'S', 1, 1, NULL,
-                :monto, 0, 0, 0, 0, :monto, 0, 0, 0,
-                :monto, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, :monto, :ag, NULL, NULL, 1, NULL, NOW()
+                :periodomes, :pkcc, :pksol, :est, :plazo, :nrodias,
+                :monto, :monto, 0,
+                0, 0, 0,
+                0, 0, 0, 0,
+                :prod, 1, 1, :mon, 1,
+                :pkcli, 1, :cond,
+                'N', 'S', 1, 1,
+                :monto, 0, 0, 0,
+                :monto, 0, :monto,
+                :ag, 1, NOW()
             )
         """), {
             "periodomes": periodomes, "pkcc": pkcc, "pksol": sol.pksolicitud, "est": cat.est,
             "plazo": plazo, "nrodias": nrodias, "monto": monto, "prod": cat.prod,
-            "mon": cat.mon, "act": cat.act, "pkcli": sol.pkcliente, "cond": cat.cond, "ag": cat.ag
+            "mon": cat.mon, "pkcli": sol.pkcliente, "cond": cat.cond, "ag": cat.ag
         })
     except Exception as e:
         db.rollback()
